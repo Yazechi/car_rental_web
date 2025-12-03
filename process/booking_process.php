@@ -61,7 +61,7 @@ if (isset($_POST['submit_booking'])) {
         $wa_text .= "Total Estimasi: Rp " . number_format($total_harga, 0, ',', '.') . "%0A%0A";
         $wa_text .= "ID Booking: #$booking_id";
         
-        $wa_url = "https://wa.me/6287812312632?text=$wa_text";
+        $wa_url = "https://wa.me/6281234567890?text=$wa_text";
         header("Location: $wa_url");
     } else {
         echo "<script>alert('Gagal menyimpan data booking: " . mysqli_error($koneksi) . "'); window.history.back();</script>";
