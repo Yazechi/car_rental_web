@@ -3,28 +3,49 @@
     <span class="badge bg-warning text-dark">Update: <?= date('F Y'); ?></span>
 </div>
 
-<div class="alert alert-info d-flex align-items-center" role="alert">
-    <i class="fas fa-info-circle fa-2x me-3"></i>
-    <div>
-        <strong>Catatan:</strong> Harga dibawah ini adalah untuk pemakaian Dalam Kota (12 Jam). Untuk Luar Kota atau Drop Off, silahkan hubungi CS kami.
-    </div>
-</div>
-
 <div class="row g-4">
     <?php
     $query_mobil = mysqli_query($koneksi, "SELECT * FROM cars");
-    $car_images = ['avanza.png', 'brio.png', 'alphard.png'];
-    $img_index = 0;
+    
+    if (!$query_mobil) {
+        echo '<div class="col-12"><div class="alert alert-danger">Error: ' . mysqli_error($koneksi) . '</div></div>';
+    } elseif (mysqli_num_rows($query_mobil) == 0) {
+        echo '<div class="col-12"><div class="alert alert-info">Belum ada data mobil tersedia.</div></div>';
+    }
     
     while ($mobil = mysqli_fetch_array($query_mobil)) {
-        $car_img = isset($car_images[$img_index]) ? $car_images[$img_index] : 'avanza.png';
-        $img_index++;
+        // Logika Gambar dengan 3 tier fallback
+        $img_src = "assets/img/avanza.png"; // Default fallback
+        
+        // Tier 1: Cek gambar dari folder uploads (untuk mobil baru yang diupload)
+        if (!empty($mobil['gambar']) && file_exists("uploads/" . $mobil['gambar'])) {
+            $img_src = "uploads/" . $mobil['gambar'];
+        }
+        // Tier 2: Cek gambar dari folder assets/img (untuk gambar default/existing)
+        elseif (!empty($mobil['gambar']) && file_exists("assets/img/" . $mobil['gambar'])) {
+            $img_src = "assets/img/" . $mobil['gambar'];
+        }
+        // Tier 3: Gunakan gambar default berdasarkan nama mobil
+        else {
+            $nama_lower = strtolower($mobil['nama_mobil']);
+            if (strpos($nama_lower, 'avanza') !== false) {
+                $img_src = "assets/img/avanza.png";
+            } elseif (strpos($nama_lower, 'brio') !== false) {
+                $img_src = "assets/img/brio.png";
+            } elseif (strpos($nama_lower, 'alphard') !== false) {
+                $img_src = "assets/img/alphard.png";
+            } elseif (strpos($nama_lower, 'fortuner') !== false) {
+                $img_src = "assets/img/fortuner.png";
+            } elseif (strpos($nama_lower, 'lexus') !== false) {
+                $img_src = "assets/img/lexus.jpeg";
+            }
+        }
     ?>
         <div class="col-lg-6">
             <div class="card h-100 shadow-sm border-0 car-card">
                 <div class="position-relative">
-                    <img src="assets/img/<?= $car_img; ?>" class="card-img-top" alt="<?= $mobil['nama_mobil']; ?>">
-                    <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-2 rounded-pill fw-bold">Best Seller</span>
+                    <img src="<?= $img_src; ?>" class="card-img-top" alt="<?= $mobil['nama_mobil']; ?>" style="height: 250px; object-fit: cover;">
+                    <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-2 rounded-pill fw-bold">Ready</span>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
@@ -33,56 +54,26 @@
                     </div>
 
                     <h3 class="text-primary fw-bold my-3">Rp <?= number_format($mobil['harga'], 0, ',', '.'); ?> <small class="text-muted fs-6 fw-normal">/ 12 jam</small></h3>
-
                     <p class="card-text text-muted small"><?= $mobil['deskripsi']; ?></p>
 
-                    <div class="row text-center text-muted mb-3 small bg-light py-2 rounded mx-1">
-                        <div class="col-4 border-end"><i class="fas fa-gas-pump"></i> Bensin</div>
-                        <div class="col-4 border-end"><i class="fas fa-chair"></i> 7 Seat</div>
-                        <div class="col-4"><i class="fas fa-cog"></i> Auto/Man</div>
-                    </div>
-
                     <div class="d-grid gap-2">
-                        <a href="https://wa.me/628123456789?text=Halo%20saya%20booking%20<?= $mobil['nama_mobil']; ?>" class="btn btn-success fw-bold"><i class="fab fa-whatsapp"></i> Booking WhatsApp</a>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <a href="process/booking_process.php?car_id=<?= $mobil['id']; ?>&car_name=<?= urlencode($mobil['nama_mobil']); ?>" class="btn btn-success fw-bold">
+                                <i class="fab fa-whatsapp"></i> Booking Sekarang
+                            </a>
+                            <a href="index.php?page=booking&car_id=<?= $mobil['id']; ?>" class="btn btn-primary fw-bold">
+                                <i class="fas fa-calendar-check"></i> Booking Online
+                            </a>
+                        <?php else: ?>
+                            <button onclick="alert('Silahkan Login atau Daftar akun terlebih dahulu untuk memesan!')" class="btn btn-secondary fw-bold">
+                                <i class="fas fa-lock"></i> Login untuk Memesan
+                            </button>
+                        <?php endif; ?>
+
                         <a href="index.php?page=kontak" class="btn btn-outline-dark">Hubungi Kantor</a>
                     </div>
                 </div>
             </div>
         </div>
     <?php } ?>
-</div>
-
-<div class="mt-5">
-    <h4 class="mb-3">Syarat & Ketentuan Sewa</h4>
-    <div class="accordion" id="accordionSyarat">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                    Syarat Lepas Kunci (Self Drive)
-                </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionSyarat">
-                <div class="accordion-body">
-                    <ul>
-                        <li>E-KTP Asli dan KK (Kartu Keluarga).</li>
-                        <li>SIM A yang masih berlaku.</li>
-                        <li>Bersedia disurvei tempat tinggal (domisili).</li>
-                        <li>Deposit jaminan (dikembalikan saat selesai sewa).</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                    Sewa Dengan Supir (All In)
-                </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionSyarat">
-                <div class="accordion-body">
-                    Harga sudah termasuk Supir dan BBM (Dalam Kota). Belum termasuk Parkir, Tol, Tiket Wisata, dan Makan Supir. Overtime dikenakan biaya 10% per jam.
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

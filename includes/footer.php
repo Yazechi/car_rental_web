@@ -2,7 +2,7 @@
         <div class="container">
             <p class="mb-0">
                 &copy; <?php echo date('Y'); ?> Nusantara Rent Car. All Rights Reserved.<br>
-                <small>Design by: <b>Kevin Kristian Pakpahan</b></small>
+                <small>Design by: <b>Kevin Kristian Pakpahanx</b></small>
             </p>
         </div>
     </footer>

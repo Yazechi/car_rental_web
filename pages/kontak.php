@@ -42,23 +42,21 @@
                 <div class="d-flex mb-3">
                     <i class="fas fa-map-marker-alt fa-fw fa-lg me-3 text-danger"></i>
                     <div>
-                        <strong>Nusantara Rent Car</strong><br>
-                        Gedung Menara Batavia Lt. 5<br>
-                        Jl. KH. Mas Mansyur Kav. 126<br>
-                        Jakarta Pusat, 10220
+                        <strong><?= get_content('company_name', 'Nusantara Rent Car'); ?></strong><br>
+                        <?= nl2br(get_content('contact_office', 'Jakarta Pusat')); ?>
                     </div>
                 </div>
                 <div class="d-flex mb-3">
                     <i class="fas fa-phone fa-fw fa-lg me-3 text-success"></i>
-                    <div>(021) 5789-1234 (Hunting)</div>
+                    <div><?= get_content('contact_phone', '(021) 1234-5678'); ?></div>
                 </div>
                 <div class="d-flex mb-3">
                     <i class="fab fa-whatsapp fa-fw fa-lg me-3 text-success"></i>
-                    <div>0812-3456-7890 (24 Jam)</div>
+                    <div><?= get_content('contact_whatsapp', '0812-3456-7890'); ?> (24 Jam)</div>
                 </div>
                 <div class="d-flex">
                     <i class="fas fa-envelope fa-fw fa-lg me-3 text-warning"></i>
-                    <div>cs@nusantararent.com</div>
+                    <div><?= get_content('contact_email', 'cs@nusantararent.com'); ?></div>
                 </div>
             </div>
         </div>

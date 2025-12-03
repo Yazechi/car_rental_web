@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config/database.php';
+include 'includes/functions.php';
 include 'includes/header.php';
 ?>
 
@@ -14,7 +15,7 @@ include 'includes/header.php';
             <div class="content-box">
                 <?php
                 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
-                $allowed_pages = ['home', 'about', 'visi', 'produk', 'gallery', 'kontak', 'klien', 'artikel', 'admin'];
+                $allowed_pages = ['home', 'about', 'visi', 'produk', 'gallery', 'kontak', 'klien', 'artikel', 'admin', 'register', 'history', 'user_dashboard', 'booking', 'content_manager'];
                 
                 if (in_array($page, $allowed_pages)) {
                     $file = "pages/" . $page . ".php";

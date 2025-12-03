@@ -2,52 +2,18 @@
 <p class="text-muted mb-4">Momen-momen terbaik bersama pelanggan kami. Dari perjalanan wisata hingga layanan VVIP.</p>
 
 <div class="row g-3">
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/wedding_car_event.png" class="card-img-top" alt="Wedding">
-            <div class="card-body">
-                <p class="card-text small text-center">Layanan Wedding Car Mewah</p>
+    <?php
+    $gallery = get_gallery_images();
+    foreach ($gallery as $img) {
+        $img_path = file_exists("assets/img/" . $img['image']) ? "assets/img/" . $img['image'] : "uploads/" . $img['image'];
+    ?>
+        <div class="col-lg-4 col-md-6">
+            <div class="card shadow-sm">
+                <img src="<?= $img_path; ?>" class="card-img-top" alt="<?= $img['title']; ?>">
+                <div class="card-body">
+                    <p class="card-text small text-center"><?= $img['description']; ?></p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/tour_wisata_event.png" class="card-img-top" alt="Tour">
-            <div class="card-body">
-                <p class="card-text small text-center">Wisata Gunung Bromo</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/tamu_vip_event.png" class="card-img-top" alt="VIP">
-            <div class="card-body">
-                <p class="card-text small text-center">Pengawalan Tamu VVIP</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/family_gathering_event.png" class="card-img-top" alt="Family">
-            <div class="card-body">
-                <p class="card-text small text-center">Family Gathering PT. Maju</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/serah_terima_event.png" class="card-img-top" alt="Car">
-            <div class="card-body">
-                <p class="card-text small text-center">Serah Terima Unit Lepas Kunci</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6">
-        <div class="card shadow-sm">
-            <img src="assets/img/hiAce_event.png" class="card-img-top" alt="Hiace">
-            <div class="card-body">
-                <p class="card-text small text-center">Toyota HiAce Commuter</p>
-            </div>
-        </div>
-    </div>
+    <?php } ?>
 </div>
